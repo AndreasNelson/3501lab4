@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Bin {
     private int b;
@@ -6,30 +7,38 @@ public class Bin {
 
     public Bin(int b) {
         this.b = b;
-        this.bins = new ArrayList<>(b);
-        for (int i = 0; i < b; i++) {
-            bins.add(0); // Initialize with default values
-        }
+        this.bins = new ArrayList<>();
     }
 
     public int getB() {
         return b;
     }
 
-    public void setBinValue(int index, int value) {
-        if (index >= 0 && index < b) {
-            bins.set(index, value);
+    public void setBinValue(int value) {
+        if (getCurrentSum() + value <= b) {
+            bins.add(value);
         } else {
-            throw new IndexOutOfBoundsException("Index out of bounds");
+            throw new IllegalArgumentException("Adding this value exceeds the bin's maximum capacity");
         }
     }
 
-    public int getBinValue(int index) {
-        if (index >= 0 && index < b) {
-            return bins.get(index);
-        } else {
-            throw new IndexOutOfBoundsException("Index out of bounds");
+
+
+    private int getCurrentSum() {
+        int sum = 0;
+        for (int value : bins) {
+            sum += value;
         }
+        return sum;
     }
-    
+
+    public List<Integer> getBins() {
+        return bins;
+    }
+
+    // Method to get bin value at a specific index
+    public int getBinValue(int index) {
+        return bins.get(index);
+    }
+
 }
