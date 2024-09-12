@@ -1,10 +1,15 @@
+import java.util.ArrayList;
+
 public class Bin {
     private int b;
-    private int[] bins;
+    private ArrayList<Integer> bins;
 
     public Bin(int b) {
         this.b = b;
-        this.bins = new int[b];
+        this.bins = new ArrayList<>(b);
+        for (int i = 0; i < b; i++) {
+            bins.add(0); // Initialize with default values
+        }
     }
 
     public int getB() {
@@ -12,20 +17,19 @@ public class Bin {
     }
 
     public void setBinValue(int index, int value) {
-        if (index >= 0 && index <b) {
-            bins[index] = value;
-        }
-        else {
+        if (index >= 0 && index < b) {
+            bins.set(index, value);
+        } else {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
     }
 
     public int getBinValue(int index) {
         if (index >= 0 && index < b) {
-            return bins[index];
-        }
-        else {
+            return bins.get(index);
+        } else {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
     }
+    
 }
