@@ -14,15 +14,14 @@ public class Bin {
         return b;
     }
 
-    public void setBinValue(int value) {
+    public boolean setBinValue(int value) {
         if (getCurrentSum() + value <= b) {
             bins.add(value);
+            return true;
         } else {
-            throw new IllegalArgumentException("Adding this value exceeds the bin's maximum capacity");
+            return false;
         }
     }
-
-
 
     private int getCurrentSum() {
         int sum = 0;
@@ -36,9 +35,7 @@ public class Bin {
         return bins;
     }
 
-    // Method to get bin value at a specific index
     public int getBinValue(int index) {
         return bins.get(index);
     }
-
 }
