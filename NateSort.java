@@ -3,66 +3,66 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NateSort {
+
     public static void nateSort(int[] arr, int b) {
-        Arrays.sort(arr); // Step 1: Sort the array in ascending order
+        Arrays.sort(arr); // Sort the array in ascending order
 
         Bin bin1 = new Bin(b);
         Bin bin2 = new Bin(b);
         Bin bin3 = new Bin(b);
         List<Integer> remainder = new ArrayList<>();
 
-        List<Integer> arrayList = new ArrayList<>();
-        for (int num : arr) {
-            arrayList.add(num);
-        }
+        boolean[] used = new boolean[arr.length]; // To track used items
 
-        int high = arrayList.size() - 1;
-        int mid = arrayList.size() / 2;
+        int high = arr.length - 1;
+        int mid = arr.length / 2;
 
         while (high >= 0) {
-            boolean added = false;
-            while (mid >= 0 && high >= 0) {
-                int sum = arrayList.get(high) + arrayList.get(mid);
-                if (sum <= b) {
-                    if (bin1.setBinValue(arrayList.get(high)) && bin1.setBinValue(arrayList.get(mid))) {
-                        arrayList.remove(high);
-                        arrayList.remove(mid);
-                        added = true;
-                    } else if (bin2.setBinValue(arrayList.get(high)) && bin2.setBinValue(arrayList.get(mid))) {
-                        arrayList.remove(high);
-                        arrayList.remove(mid);
-                        added = true;
-                    } else if (bin3.setBinValue(arrayList.get(high)) && bin3.setBinValue(arrayList.get(mid))) {
-                        arrayList.remove(high);
-                        arrayList.remove(mid);
-                        added = true;
-                    } else {
-                        remainder.add(arrayList.get(high));
-                        remainder.add(arrayList.get(mid));
-                        arrayList.remove(high);
-                        arrayList.remove(mid);
+            if (used[high]) { 
+                high--;
+                continue; 
+            }
+
+            boolean paired = false;
+            // Try to pair with another item
+            for (int i = mid; i >= 0 && !paired; i--) {
+                if (!used[i]) {
+                    int sum = arr[high] + arr[i];
+                    if (sum <= b) {
+                        if (bin1.setBinValue(arr[high]) && bin1.setBinValue(arr[i])) {
+                            used[high] = true;
+                            used[i] = true;
+                            paired = true;
+                        } else if (bin2.setBinValue(arr[high]) && bin2.setBinValue(arr[i])) {
+                            used[high] = true;
+                            used[i] = true;
+                            paired = true;
+                        } else if (bin3.setBinValue(arr[high]) && bin3.setBinValue(arr[i])) {
+                            used[high] = true;
+                            used[i] = true;
+                            paired = true;
+                        } else {
+                            // If the first value was added but the second was not, remove the first value
+                            bin1.removeBinValue(arr[high]);
+                            bin2.removeBinValue(arr[high]);
+                            bin3.removeBinValue(arr[high]);
+                        }
                     }
-                    high = arrayList.size() - 1;
-                    mid = arrayList.size() / 2;
-                    break;
-                } else {
-                    mid--;
                 }
             }
-            if (!added && high >= 0) {
-                if (bin1.setBinValue(arrayList.get(high))) {
-                    // Successfully added to bin1
-                } else if (bin2.setBinValue(arrayList.get(high))) {
-                    // Successfully added to bin2
-                } else if (bin3.setBinValue(arrayList.get(high))) {
-                    // Successfully added to bin3
-                } else {
-                    remainder.add(arrayList.get(high));
+
+            // If no pair is found, place the item alone
+            if (!paired) {
+                if (!bin1.setBinValue(arr[high]) && 
+                    !bin2.setBinValue(arr[high]) &&
+                    !bin3.setBinValue(arr[high])) {
+                    remainder.add(arr[high]);
                 }
-                arrayList.remove(high);
-                high = arrayList.size() - 1;
-                mid = arrayList.size() / 2;
+                used[high] = true;
             }
+
+            high--;
+            mid = arr.length / 2; // Recalculate mid after potential removals
         }
 
         // Print bins and remainder
@@ -72,7 +72,6 @@ public class NateSort {
         System.out.println("Remainder: " + remainder);
     }
 
-    // Main method for testing
     public static void main(String[] args) {
         int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
         int b = 30;

@@ -2,40 +2,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bin {
-    private int b;
-    private ArrayList<Integer> bins;
+    private int capacity;
+    private int currentValue;
+    private List<Integer> values;
 
-    public Bin(int b) {
-        this.b = b;
-        this.bins = new ArrayList<>();
-    }
-
-    public int getB() {
-        return b;
+    public Bin(int capacity) {
+        this.capacity = capacity;
+        this.currentValue = 0;
+        this.values = new ArrayList<>();
     }
 
     public boolean setBinValue(int value) {
-        if (getCurrentSum() + value <= b) {
-            bins.add(value);
+        if (currentValue + value <= capacity) {
+            currentValue += value;
+            values.add(value);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
-    private int getCurrentSum() {
-        int sum = 0;
-        for (int value : bins) {
-            sum += value;
+    public boolean removeBinValue(int value) {
+        if (values.contains(value)) {
+            currentValue -= value;
+            values.remove(Integer.valueOf(value));
+            return true;
         }
-        return sum;
+        return false;
     }
 
     public List<Integer> getBins() {
-        return bins;
-    }
-
-    public int getBinValue(int index) {
-        return bins.get(index);
+        return values;
     }
 }
