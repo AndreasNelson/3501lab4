@@ -1,7 +1,7 @@
 # 3501lab4
 
 ## How to Run the Code
-To run the code, execute the `Main.java` file. You can provide the test input as an array using the scanner in the terminal.
+To run the code, execute the `Main.java` file. You can provide the test input as an array using the scanner in the terminal. The input includes the capacity of the bins followed by the number of items N followed by the items themselves separated by spaces.
 
 ## Efficiency Analysis
 The provided code achieves polynomial efficiency primarily due to its core algorithm that pairs items for optimal bin packing. 
