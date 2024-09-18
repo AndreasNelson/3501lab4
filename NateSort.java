@@ -1,18 +1,29 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class NateSort {
 
-    public static void nateSort(int[] arr, int b) {
+    public static void nateSort(String input) {
+        Scanner scanner = new Scanner(input);
+        
+        int binSize = scanner.nextInt(); // Read bin size
+        int n = scanner.nextInt(); // Read number of items
+
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = scanner.nextInt(); // Read items
+        }
+
         Arrays.sort(arr); // Sort the array in ascending order
 
-        Bin bin1 = new Bin(b);
-        Bin bin2 = new Bin(b);
-        Bin bin3 = new Bin(b);
+        Bin bin1 = new Bin(binSize);
+        Bin bin2 = new Bin(binSize);
+        Bin bin3 = new Bin(binSize);
         List<Integer> remainder = new ArrayList<>();
 
-        boolean[] used = new boolean[arr.length]; // To track used items
+        boolean[] used = new boolean[arr.length];
 
         int high = arr.length - 1;
         int mid = arr.length / 2;
@@ -24,11 +35,12 @@ public class NateSort {
             }
 
             boolean paired = false;
-            // Try to pair with another item
+            boolean firstAdded = false; 
+
             for (int i = mid; i >= 0 && !paired; i--) {
                 if (!used[i]) {
                     int sum = arr[high] + arr[i];
-                    if (sum <= b) {
+                    if (sum <= binSize) {
                         if (bin1.setBinValue(arr[high]) && bin1.setBinValue(arr[i])) {
                             used[high] = true;
                             used[i] = true;
@@ -70,11 +82,5 @@ public class NateSort {
         System.out.println("Bin 2: " + bin2.getBins());
         System.out.println("Bin 3: " + bin3.getBins());
         System.out.println("Remainder: " + remainder);
-    }
-
-    public static void main(String[] args) {
-        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-        int b = 30;
-        nateSort(arr, b);
     }
 }
